@@ -125,6 +125,23 @@ const verifyOtp = async (req, res) => {
   }
 };
 
+export const verifyOTP = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        // Add your OTP verification logic here
+        
+        res.status(200).json({
+            success: true,
+            message: "OTP verified successfully"
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
 // Login User
 const loginUser = async (req, res) => {
   try {
@@ -319,4 +336,5 @@ export {
   getAllEmployees,
   updateUserProfile,
   verifyOtp,
+  verifyOTP
 };
