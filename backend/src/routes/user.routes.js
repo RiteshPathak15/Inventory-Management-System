@@ -12,6 +12,6 @@ router.get("/me", verifyJWT, getUserProfile);  // Route for fetching user profil
 router.put("/avatar", verifyJWT, upload.single("avatar"), updateUserAvatar); // Route for updating avatar (protected)
 router.get("/employees", verifyJWT, getAllEmployees); // Route for fetching all employees (admin only)
 router.put("/profile", verifyJWT, updateUserProfile); // Route for updating user profile (protected)
-router.post("/verify-otp", verifyOtp);
+router.post("/verify-otp", userController.verifyOTP);
 
 export default router;

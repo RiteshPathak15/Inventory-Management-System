@@ -49,11 +49,14 @@ const Register = () => {
     }
 
     try {
-      const { data } = await axios.post("/api/users/register", form, {
+      const response = await axios.post("/api/users/register", form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      toast.success(data.message);
-      setIsOtpSent(true);
+
+      if (response.data.success) {
+        toast.success("Registration successful! Please check your email for OTP");
+        setIsOtpSent(true);
+      }
     } catch (error) {
       toast.error(
         error.response?.data?.message || "Error occurred during registration"
@@ -64,13 +67,23 @@ const Register = () => {
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
 
+    if (!otp) {
+      toast.error("Please enter OTP");
+      return;
+    }
+
     try {
-      const { data } = await axios.post("/api/verify-otp", {
+      const response = await axios.post("/api/users/verify-otp", {
         email: formData.email,
-        otp,
+        otp: otp,
       });
-      toast.success(data.message);
-      navigate("/login");
+
+      if (response.data.success) {
+        toast.success("Email verified successfully!");
+        setTimeout(() => {
+          navigate("/login");
+        }, 2000);
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || "Invalid or expired OTP");
     }
