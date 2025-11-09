@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
@@ -16,7 +16,12 @@ const Register = () => {
   const [avatar, setAvatar] = useState(null);
   const [otp, setOtp] = useState("");
   const [isOtpSent, setIsOtpSent] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("isOtpSent changed:", isOtpSent);
+  }, [isOtpSent]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -28,6 +33,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (
       !formData.fullname ||
@@ -36,6 +42,7 @@ const Register = () => {
       !formData.password
     ) {
       toast.error("All fields are required!");
+      setIsLoading(false);
       return;
     }
 
@@ -49,18 +56,29 @@ const Register = () => {
     }
 
     try {
+      // Add logging to debug
+      console.log("Submitting registration form...");
+
       const response = await axios.post("/api/users/register", form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
+      console.log("Registration response:", response.data);
+
       if (response.data.success) {
         toast.success("Registration successful! Please check your email for OTP");
+        // Force state update and add console log
+        console.log("Setting isOtpSent to true");
         setIsOtpSent(true);
+        console.log("isOtpSent value after update:", true);
       }
     } catch (error) {
+      console.error("Registration error:", error);
       toast.error(
         error.response?.data?.message || "Error occurred during registration"
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -149,9 +167,10 @@ const Register = () => {
               />
               <button
                 type="submit"
-                className="w-full p-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700"
+                disabled={isLoading}
+                className="w-full p-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 disabled:bg-blue-300"
               >
-                Register
+                {isLoading ? "Registering..." : "Register"}
               </button>
             </form>
           ) : (

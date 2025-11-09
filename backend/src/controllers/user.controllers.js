@@ -91,7 +91,15 @@ const registerUser = async (req, res) => {
     await newUser.save();
     
     await sendMail(email, body, "Welcome to Shanti Store");
-    res.status(201).json({ message: "User registered successfully. Please check your email for the OTP." });
+    res.status(201).json({
+      success: true,
+      message: "Registration successful",
+      user: {
+        fullname,
+        username,
+        email
+      }
+    });
   } catch (error) {
     console.error("Error with registration:", error);
     res.status(500).json({ message: "Server error. Please try again later." });
