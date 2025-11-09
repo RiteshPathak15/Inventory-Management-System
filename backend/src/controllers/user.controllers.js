@@ -3,7 +3,7 @@ import bcryptjs from "bcryptjs";
 import { User } from "../models/User.models.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.utils.js";
 import dotenv from "dotenv";
-import { sendMail, sendOTPEmail } from "../mailer/mailer.js";
+import {sendOTPEmail } from "../mailer/mailer.js";
 import crypto from "crypto";
 
 dotenv.config();
@@ -89,7 +89,7 @@ const registerUser = async (req, res) => {
     });
     await newUser.save();
     
-    await sendMail(email, body, "Welcome to Shanti Store");
+    await sendOTPEmail(email, body, "Welcome to Shanti Store");
     res.status(201).json({
       success: true,
       message: "Registration successful",
