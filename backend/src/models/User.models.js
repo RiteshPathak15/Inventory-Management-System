@@ -47,10 +47,16 @@ const userSchema = new Schema(
     },
     otp: {
       type: String,
+      required: false
     },
     otpExpiry: {
       type: Date,
+      required: false
     },
+    isVerified: {
+      type: Boolean,
+      default: false
+    }
   },
   {
     timestamps: true, // Automatically add createdAt and updatedAt fields
