@@ -7,8 +7,13 @@ import inventoryRoutes from "./routes/inventory.routes.js";
 import supplierRoutes from "./routes/supplier.routes.js";
 import orderRoutes from "./routes/order.routes.js";
 import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
+
+// Fix __dirname for ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());
@@ -35,7 +40,7 @@ app.get("/", (req, res) => {
 
 // Serve frontend build in production
 if (process.env.NODE_ENV === "production") {
-  const publicPath = path.join(__dirname, "..", "public");
+  const publicPath = path.resolve(__dirname, "..", "public");
   app.use(express.static(publicPath));
   app.get("*", (req, res) => {
     res.sendFile(path.join(publicPath, "index.html"));

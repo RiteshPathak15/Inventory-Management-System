@@ -2,12 +2,12 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "this is backend for inventory management",
-  "main": "index.js",
+  "main": "src/index.js",
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "postinstall": "npm --prefix ../frontend install && npm --prefix ../frontend run build && cp -a ../frontend/dist/. public/ || true"
+    "postinstall": "cd ../frontend && npm install --production=false && npm run build && rm -rf ../backend/public && mkdir -p ../backend/public && cp -r dist/* ../backend/public || true"
   },
   "keywords": [
     "inventory-managment",
