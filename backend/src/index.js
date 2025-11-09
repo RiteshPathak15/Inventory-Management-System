@@ -7,6 +7,7 @@ import inventoryRoutes from "./routes/inventory.routes.js";
 import supplierRoutes from "./routes/supplier.routes.js";
 import orderRoutes from "./routes/order.routes.js";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 
 dotenv.config();
@@ -32,21 +33,27 @@ app.use("/api/users", userRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/suppliers", supplierRoutes);
 app.use("/api/orders", orderRoutes);
-app.use("/api", userRoutes);
 
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
-
-// Serve frontend build in production
-if (process.env.NODE_ENV === "production") {
-  const publicPath = path.resolve(__dirname, "..", "public");
+// Serve frontend build if present
+const publicPath = path.resolve(__dirname, "..", "public");
+if (fs.existsSync(publicPath) && fs.existsSync(path.join(publicPath, "index.html"))) {
   app.use(express.static(publicPath));
+  // fallback for client-side routing
   app.get("*", (req, res) => {
     res.sendFile(path.join(publicPath, "index.html"));
+  });
+} else {
+  // fallback API message only if frontend not present
+  app.get("/", (req, res) => {
+    res.send("API is running...");
   });
 }
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  if (fs.existsSync(path.join(publicPath, "index.html"))) {
+    console.log("Serving frontend from:", publicPath);
+  } else {
+    console.log("Frontend build not found in backend/public");
+  }
 });
