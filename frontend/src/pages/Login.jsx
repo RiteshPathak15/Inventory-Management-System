@@ -28,7 +28,7 @@ const Login = ({ setIsLoggedIn, setUsername, setIsAdmin }) => {
 
     try {
       // Send login request
-      const { data } = await axios.post("/api/login", formData);
+      const { data } = await axios.post("/api/users/login", formData);
 
       // Decode the token to get user details
       const decodedToken = JSON.parse(atob(data.token.split(".")[1]));

@@ -49,7 +49,7 @@ const Register = () => {
     }
 
     try {
-      const { data } = await axios.post("/api/register", form, {
+      const { data } = await axios.post("/api/users/register", form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       toast.success(data.message);
