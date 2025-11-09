@@ -318,47 +318,6 @@ const updateUserProfile = async (req, res) => {
   }
 };
 
-export const register = async (req, res) => {
-  try {
-    const { fullname, username, email, password } = req.body;
-    
-    // Generate OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    
-    // Save user with OTP
-    const user = new User({
-      fullname,
-      username,
-      email,
-      password,
-      otp,
-      otpExpiry: new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
-    });
-
-    await user.save();
-
-    // Send OTP email
-    console.log('Sending OTP email...');
-    await sendOTPEmail(email, otp);
-    console.log('OTP email sent successfully');
-
-    res.status(201).json({
-      success: true,
-      message: "Registration successful. Please check your email for OTP",
-      user: {
-        email: user.email
-      }
-    });
-
-  } catch (error) {
-    console.error('Registration error:', error);
-    res.status(400).json({
-      success: false,
-      message: error.message
-    });
-  }
-};
-
 // Export controllers
 export {
   registerUser,
@@ -369,5 +328,5 @@ export {
   getAllEmployees,
   updateUserProfile,
   verifyOtp,
-  register, // Export the register function
+
 };
