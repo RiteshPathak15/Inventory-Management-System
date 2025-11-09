@@ -1,6 +1,6 @@
 import Order from "../models/Order.models.js";
 import Inventory from "../models/Inventory.models.js";
-import { sendMail } from "../mailer/mailer.js"; // Import sendMail function
+import { sendOTPEmail } from "../mailer/mailer.js"; // Import sendMail function
 
 const getOrders = async (req, res) => {
   try {
@@ -63,7 +63,7 @@ const addOrder = async (req, res) => {
       <p>Delivery Date: ${new Date(deliveryDate).toLocaleDateString()}</p>
       <p>Notify on Delivery: ${notifyOnDelivery ? "Yes" : "No"}</p>
     `;
-    await sendMail(adminEmail, body, subject);
+    await sendOTPEmail(adminEmail, body, subject);
 
     res.status(201).json({ message: "Order added successfully", newOrder });
   } catch (error) {
