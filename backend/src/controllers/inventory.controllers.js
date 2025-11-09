@@ -2,7 +2,7 @@ import Inventory from "../models/Inventory.models.js";
 import { upload } from "../middlewares/multer.middlewares.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.utils.js";
 import Sale from "../models/Sale.models.js";
-import { sendMail } from "../mailer/mailer.js";
+import { sendOTPEmail } from "../mailer/mailer.js";
 
 const getInventory = async (req, res) => {
   try {
@@ -212,7 +212,7 @@ const getLowStockItems = async (req, res) => {
 </body>
 </html>`;
 
-    await sendMail(email, body, subject);
+    await sendOTPEmail(email, body, subject);
 
     res.status(200).json(lowStockItems);
   } catch (error) {
